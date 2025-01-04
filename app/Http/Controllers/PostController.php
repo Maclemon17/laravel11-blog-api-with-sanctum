@@ -39,4 +39,40 @@ class PostController extends Controller
             return response()->json(data: ['error' => $err->getMessage(), $err], status: 403);
         }
     }
+
+    // EDIT POST
+    public function editPost(Request $request): JsonResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'content' => 'required|string',
+            'post_id' => 'required|integer',
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json($validated->errors(), 403);
+        }
+
+        try {
+            $post = Post::find($request->post_id);
+
+            if ($post->user_id !== Auth::id()) {
+                return response()->json(data: ['error' => 'Unauthorized'], status: 403);
+            }
+
+            $post->update([
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+
+            return response()->json(data: [
+                'message' => 'Post updated successfully',
+                'post' => $post,
+                'post_id' => $post->id,
+            ], status: 200);
+
+        } catch (\Throwable $err) {
+            return response()->json(data: ['error' => $err->getMessage(), $err], status: 403);
+        }
+    }
 }
