@@ -75,4 +75,23 @@ class PostController extends Controller
             return response()->json(data: ['error' => $err->getMessage(), $err], status: 403);
         }
     }
+
+
+    // GET ALL POST
+    public function getAllPosts(Request $request): JsonResponse 
+    {
+        try {
+            $posts = Post::all();
+
+            return response()->json(data: [
+                'posts' => $posts,
+                'status' => true,
+            ], status: 200);
+
+        } catch (\Throwable $err) {
+            return response()->json(data: [
+                'error' => $err->getMessage(),
+            ], status: 403);
+        }
+    }
 }

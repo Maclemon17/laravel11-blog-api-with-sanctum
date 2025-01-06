@@ -10,11 +10,16 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 Route::get('/', function () {
-    return response()->json(['message' => 'Hello World!']);
+    return response()->json(['message' => 'Welcome to blog api']);
 });
 
+// AUTH
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
+// GET ALL POST
+Route::get('/posts', [PostController::class, 'getAllPosts']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
