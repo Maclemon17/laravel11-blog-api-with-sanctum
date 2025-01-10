@@ -31,5 +31,6 @@ Route::middleware('auth:sanctum')->group(function () {
     // EDIT POST
     Route::post('/edit-post', [PostController::class, 'editPost']);
     Route::post('/edit-post/{post_id}', [PostController::class, 'editPost2']);
-
+    // DELETE POST
+    Route::delete('/delete-post/{post_id}', [PostController::class, 'deletePost']);
 });

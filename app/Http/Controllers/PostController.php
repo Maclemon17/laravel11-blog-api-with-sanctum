@@ -149,4 +149,30 @@ class PostController extends Controller
             ], status: 403);
         }
     }
+
+    // DELETE POST
+    public function deletePost($post_id): JsonResponse
+    {
+        try {
+            $post = Post::find($post_id);
+
+            if ($post->user_id !== Auth::id()) {
+                return response()->json(data: [
+                    'error' => 'Unauthorized'
+                ], status: 403);
+            }
+
+            $post->delete();
+
+            return response()->json(data: [
+                'message' => 'Post deleted successfully',
+                'status' => true,
+            ], status: 200);
+
+        } catch (\Throwable $err) {
+            return response()->json(data: [
+                'error' => $err->getMessage(),
+            ], status: 403);
+        }
+    }
 }
