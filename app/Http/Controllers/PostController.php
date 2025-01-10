@@ -76,9 +76,45 @@ class PostController extends Controller
         }
     }
 
+    // EDIT POST
+    public function editPost2(Request $request, $post_id): JsonResponse
+    {
+        $validated = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'content' => 'required|string',
+            // 'post_id' => 'required|integer',
+        ]);
+
+        if ($validated->fails()) {
+            return response()->json($validated->errors(), 403);
+        }
+
+        try {
+            $post = Post::find($post_id);
+
+            if ($post->user_id !== Auth::id()) {
+                return response()->json(data: ['error' => 'Unauthorized'], status: 403);
+            }
+
+            $post->update([
+                'title' => $request->title,
+                'content' => $request->content,
+            ]);
+
+            return response()->json(data: [
+                'message' => 'Post updated successfully',
+                'post' => $post,
+                'post_id' => $post->id,
+            ], status: 200);
+
+        } catch (\Throwable $err) {
+            return response()->json(data: ['error' => $err->getMessage(), $err], status: 403);
+        }
+    }
+
 
     // GET ALL POST
-    public function getAllPosts(Request $request): JsonResponse 
+    public function getAllPosts(): JsonResponse 
     {
         try {
             $posts = Post::all();
@@ -88,6 +124,25 @@ class PostController extends Controller
                 'status' => true,
             ], status: 200);
 
+        } catch (\Throwable $err) {
+            return response()->json(data: [
+                'error' => $err->getMessage(),
+            ], status: 403);
+        }
+    }
+
+
+    // GET SINGLE POST
+    public function getPost($post_id): JsonResponse
+    {
+        try {
+            $post = Post::find($post_id);
+            // $post = Post::where('id', $post_id)->first();
+
+            return response()->json(data: [
+                'post' => $post,
+                'status' => false,
+            ], status: 200);
         } catch (\Throwable $err) {
             return response()->json(data: [
                 'error' => $err->getMessage(),

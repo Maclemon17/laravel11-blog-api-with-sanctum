@@ -19,6 +19,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // GET ALL POST
 Route::get('/posts', [PostController::class, 'getAllPosts']);
+// GET SINGLE POST
+Route::get('/post/{id}', [PostController::class, 'getPost']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -28,4 +30,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/add-post', [PostController::class, 'addPost']);
     // EDIT POST
     Route::post('/edit-post', [PostController::class, 'editPost']);
+    Route::post('/edit-post/{post_id}', [PostController::class, 'editPost2']);
+
 });
