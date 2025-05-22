@@ -136,8 +136,8 @@ class PostController extends Controller
     public function getPost($post_id): JsonResponse
     {
         try {
-            $post = Post::find($post_id);
-            // $post = Post::where('id', $post_id)->first();
+            // $post = Post::find($post_id);
+            $post = Post::with('author', 'comment', 'likes')->where('id', $post_id)->first();
 
             return response()->json(data: [
                 'post' => $post,

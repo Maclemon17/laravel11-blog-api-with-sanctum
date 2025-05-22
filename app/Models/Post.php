@@ -25,4 +25,15 @@ class Post extends Model
     function Author(): BelongsTo {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    function Comment(): BelongsTo {
+        return $this->belongsTo(Comment::class, 'user_id');
+    }
+
+
+    function Likes(): BelongsTo {
+        return $this->belongsTo(Like::class, 'user_id');
+    }
+
+
 }
